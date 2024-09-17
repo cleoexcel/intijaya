@@ -1,6 +1,45 @@
-<h1>INTI JAYA</h1>
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+</head>
+<body>
+    <h1>{{ shop_name }} by {{ nama }}</h1>
+    <p>NPM: {{ npm }}</p>
+    <p>Class: {{ kelas }}</p> 
 
-<h5>Nama: </h5>
-<p>{{ nama }}</p>
-<h5>Kelas: </h5>
-<p>{{ kelas }}</p>
+    {% if not product_entry %}
+    <p>Belum ada data produk.</p>
+    {% else %}
+    <table>
+    <tr>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Categories</th>
+      
+    </tr>
+
+    {% for product in product_entry %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <<td>{{ product.price }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.categories }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+
+    <br />
+
+    <a href="{% url 'main:create_name_entry' %}">
+        <button>Add New Product Entry</button>
+    </a>
+</body>
+</html>
+{% endblock content %}
