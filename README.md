@@ -235,7 +235,7 @@ Explore the live version of the site here: [INTI JAYA Webpage](http://cleo-excel
             {% for product in product_entry %}
                   <tr>
                   <td>{{ product.name }}</td>
-                  <<td>{{ product.price }}</td>
+                  <td>{{ product.price }}</td>
                   <td>{{ product.description }}</td>
                   <td>{{ product.quantity }}</td>
                   <td>{{ product.categories }}</td>
