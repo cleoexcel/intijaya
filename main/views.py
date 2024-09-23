@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib import messages
 from django.shortcuts import render,redirect
-from .models import ProductEntry  
+from main.models import ProductEntry  
 from main.forms import ProductEntryForm
 from django.http import HttpResponse
 from django.core import serializers
