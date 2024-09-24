@@ -382,7 +382,135 @@ Explore the live version of the site here: [INTI JAYA Webpage](http://cleo-excel
 - Kegunaan lain dari cookies bisa menjadi Penyimpanan preferensi pengguna, pelacakan, keranjang belanja pada e-commerce, dan isa juga menyimpan token keamanan. 
 - Tidak semua cookies aman digunakan. Cookies yang tidak dikelola dengan baik dapat rentan terhadap ancaman seperti Cross-Site Scripting (XSS) dan Cross-Site Request Forgery (CSRF). Oleh karena itu, untuk meningkatkan keamanan cookies, penting untuk mengatur cookies dengan atribut HttpOnly agar tidak dapat diakses oleh JavaScript, dan menggunakan atribut Secure agar cookies hanya dikirim melalui koneksi HTTPS.
 
+### 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)
+-  Membuat form register menggunakan `UserCreationForm` dari `django.contrib.auth.forms` di `views.py` aplikasi `main`
+```python
+def register(request):
+    form = UserCreationForm()
 
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+```
+
+- Membuat page HTML sederhananya untuk `register.html` di dalam direktori `templates/main`
+```pyhton
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class="login">
+  <h1>Register</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+      <tr>
+        <td></td>
+        <td><input type="submit" name="submit" value="Daftar" /></td>
+      </tr>
+    </table>
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+{% endblock content %}
+```
+
+- Membuat form login menggunakan `AuthenticationForms` dari `django.contrib.auth.forms` dan method `authenticate` dan `login` dari `django.contrib.auth` di `views.py` aplikasi `main`.
+    ```python
+    def login_user(request):
+   if request.method == 'POST':
+      form = AuthenticationForm(data=request.POST)
+
+      if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+        return response
+
+   else:
+      form = AuthenticationForm(request)
+   context = {'form': form}
+   return render(request, 'login.html', context)
+   ```
+- Membuat page HTML baru untuk form, yaitu `login.html` di dalam aplikasi `main`.
+```python
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+<div class="login">
+  <h1>Login</h1>
+
+  <form method="POST" action="">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+      <tr>
+        <td></td>
+        <td><input class="btn login_btn" type="submit" value="Login" /></td>
+      </tr>
+    </table>
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %} Don't have an account yet?
+  <a href="{% url 'main:register' %}">Register Now</a>
+</div>
+
+{% endblock content %}
+```
+- Membuat method `logout_user`
+```python
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+```
+-  Menambahkan pada `urls.py`
+```python
+    path('register/', register, name='register'),
+    path('login/', login_user, name='login'),
+    path('logout/', logout_user, name='logout'),
+```
+- 'Menambahkan button `logout` pada `main.html`
+```python
+    <a href="{% url 'main:logout_user' %}">
+        <button>Logout</button>
+    </a>
+```
+- Menambahkam baris pada `show_main`
+```python
+ products = ProductEntry.objects.filter(user=request.user)
+ ```
 
 
 
