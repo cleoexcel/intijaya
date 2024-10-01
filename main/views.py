@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib import messages
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, reverse
 from main.models import ProductEntry  
 from main.forms import ProductEntryForm
 from django.http import HttpResponse
@@ -16,13 +16,13 @@ from django.urls import reverse
 
 def show_main(request):
     products = ProductEntry.objects.filter(user=request.user)
-
+    print(products)
     context = {
         'npm': '2306244886',
         'nama': request.user.username,
         'kelas': 'PBP C',
         'shop_name':'INTI JAYA',  
-        'product_entry' : products,
+        'products' : products,
         'last_login': request.COOKIES['last_login'],
     }
 
@@ -87,3 +87,19 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_product(request, id):
+    products = ProductEntry.objects.get(pk = id)
+    form = ProductEntryForm(request.POST or None, instance=products)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    products = ProductEntry.objects.get(pk = id)
+    products.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))

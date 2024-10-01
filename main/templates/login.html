@@ -1,32 +1,76 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block meta %}
 <title>Login</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
+<!-- Background with texture and flex container for centering -->
+<div class="min-h-screen flex items-center justify-center w-screen bg-cover bg-center py-12 px-4 sm:px-6 lg:px-8" style="background-image: url('{% static 'images/bricks-texture.jpg' %}');">
+  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg space-y-8 relative" style="border: 2px solid #d32f2f;">
+    
+    <!-- Construction-themed logo at the top -->
+    <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white-200 rounded-full p-3 shadow-lg">
+      <img src="{% static 'images/logo2.png' %}" alt="logo Icon" class="w-20 h-20">
+    </div>
 
-  <form method="POST" action="">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input class="btn login_btn" type="submit" value="Login" /></td>
-      </tr>
-    </table>
-  </form>
+    <!-- Header with a bold title -->
+    <div class="text-center mt-8">
+      <h2 class="text-3xl font-bold text-gray-900">Welcome to <span class="text-red-600"> BANGUNAN INTI JAYA</span></h2>
+    </div>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %} Don't have an account yet?
-  <a href="{% url 'main:register' %}">Register Now</a>
+    <!-- Login Form -->
+    <form class="space-y-6" method="POST" action="">
+      {% csrf_token %}
+      <div class="space-y-4">
+        <!-- Username input field -->
+        <div class="relative">
+          <label for="username" class="sr-only">Username</label>
+          <input id="username" name="username" type="text" required class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" placeholder="Username">
+          <!-- Icon in input field -->
+          <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+            <img src="{% static 'images/user-icon.png' %}" alt="User Icon" class="h-5 w-5">
+          </div>
+        </div>
+        
+        <!-- Password input field -->
+        <div class="relative">
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" name="password" type="password" required class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm" placeholder="Password">
+          <!-- Icon in input field -->
+          <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+            <img src="{% static 'images/lock-icon.png' %}" alt="Lock Icon" class="h-5 w-5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign-in button -->
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition transform hover:scale-105">
+          <span>Sign in</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Display error messages, if any -->
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Register link -->
+    <div class="text-center mt-4">
+      <p class="text-sm text-gray-700">
+        Don't have an account yet? 
+        <a href="{% url 'main:register' %}" class="font-medium text-yellow-600 hover:text-yellow-800">
+          Register Now
+        </a>
+      </p>
+    </div>
 </div>
-
 {% endblock content %}
