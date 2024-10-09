@@ -1315,7 +1315,7 @@ def logout_user(request):
     from main.views import ..., add_mood_entry_ajax
     urlpatterns = [
     ...
-    path('create-mood-entry-ajax', add_mood_entry_ajax, name='add_mood_entry_ajax'),
+    path('create-ajax', add_mood_entry_ajax, name='add_mood_entry_ajax'),
     ]
 ```
 4. Menampilkan Data Mood Entry dengan fetch() API, menghapus kedua baris ini karena kita akan mendapatkan objek-objek product entry dari endpoint /json,
@@ -1367,7 +1367,7 @@ def logout_user(request):
         classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
         htmlString = `
           <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-            <img src="{% static 'image/sedih-banget.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+            <img src="{% static 'images/sedih-intijaya.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
             <p class="text-center text-gray-600 mt-4">Belum ada product.</p>
           </div>
         `;
